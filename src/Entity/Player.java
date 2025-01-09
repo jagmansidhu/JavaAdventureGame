@@ -13,17 +13,25 @@ public class Player extends Entity {
     GamePanel gamePanel;
     KeyHandler keyHandler;
 
+    //Indicate where we draw player on the screen in our case keep player in center of screen
+    public final int screenX;
+    public final int screenY;
+
     public Player(GamePanel gamePanel, KeyHandler keyHandler) {
         this.gamePanel = gamePanel;
         this.keyHandler = keyHandler;
+
+        screenX = gamePanel.screenWidth / 2 - gamePanel.tileSize/2;
+        screenY = gamePanel.screenHeight / 2;
 
         setDefaultVals();
         getPlayerImg();
     }
 
     public void setDefaultVals() {
-        x = 100;
-        y = 100;
+        //player starting position on map.txt 16 16
+        worldX = gamePanel.tileSize * 16;
+        worldY = gamePanel.tileSize * 16;
         speed = 4;
         direction = "up";
     }
@@ -68,19 +76,19 @@ public class Player extends Entity {
 
         if (keyHandler.upPressed) {
             direction = "up";
-            y -= speed;
+            worldY -= speed;
         }
         if (keyHandler.downPressed) {
             direction = "down";
-            y += speed;
+            worldY += speed;
         }
         if (keyHandler.leftPressed) {
             direction = "left";
-            x -= speed;
+            worldX -= speed;
         }
         if (keyHandler.rightPressed) {
             direction = "right";
-            x += speed;
+            worldX += speed;
         }
 
 
@@ -123,7 +131,7 @@ public class Player extends Entity {
                 }
                 break;
         }
-        g2.drawImage(image, x, y, gamePanel.tileSize, gamePanel.tileSize, null);
+        g2.drawImage(image, screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
     }
 
 
