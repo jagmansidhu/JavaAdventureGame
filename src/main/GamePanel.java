@@ -1,5 +1,7 @@
 package main;
 
+import Entity.Player;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -9,7 +11,7 @@ public class GamePanel extends JPanel implements Runnable {
     final int orgTileSize = 16; //16 by 16
     final int scale = 3; // sacles tile size
 
-    final int tileSize = orgTileSize * scale;
+    public final int tileSize = orgTileSize * scale;
     // 4:3 ratio for screen
     final int maxScreenCol = 16;
     final int maxScreenRow = 12;
@@ -20,6 +22,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     KeyHandler keyHandler = new KeyHandler();
     Thread gameThread; //keeps program running till i stop
+    Player player = new Player(this, keyHandler);
 
     //players default positon
     int playerX = 100;
@@ -58,6 +61,7 @@ public class GamePanel extends JPanel implements Runnable {
             // Draw Screen with updated information
             repaint(); // this is how you call paint component
 
+            // this is using sleep method to make sure screen is rendering at a correct speed????
             try {
                 double remainingTime = nextDrawTime - System.nanoTime();
                 remainingTime = remainingTime / 1000000;
@@ -77,18 +81,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        if (keyHandler.upPressed) {
-            playerY -= playerSpeed;
-        }
-        if (keyHandler.downPressed) {
-            playerY += playerSpeed;
-        }
-        if (keyHandler.leftPressed) {
-            playerX -= playerSpeed;
-        }
-        if (keyHandler.rightPressed) {
-            playerX += playerSpeed;
-        }
+        player.update();
     }
 
     //use this to paint onto scree Graphics is our paintbrush
@@ -98,9 +91,8 @@ public class GamePanel extends JPanel implements Runnable {
 
         Graphics2D g2 = (Graphics2D) g;
 
-        g2.setColor(Color.WHITE);
+        player.draw(g2);
 
-        g2.fillRect(playerX, playerY, tileSize, tileSize);
         //once drawing above done we dispose to save memory
         g2.dispose();
     }
