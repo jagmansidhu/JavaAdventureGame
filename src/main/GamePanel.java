@@ -33,6 +33,7 @@ public class GamePanel extends JPanel implements Runnable {
     Thread gameThread; //keeps program running till i stop
     public Player player = new Player(this, keyHandler);
     TileManager tileManager = new TileManager(this);
+    public CollisionCheck collisionCheck = new CollisionCheck(this);
 
     public GamePanel() {
 

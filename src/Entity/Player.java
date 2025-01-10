@@ -21,8 +21,10 @@ public class Player extends Entity {
         this.gamePanel = gamePanel;
         this.keyHandler = keyHandler;
 
-        screenX = gamePanel.screenWidth / 2 - gamePanel.tileSize/2;
+        screenX = gamePanel.screenWidth / 2 - gamePanel.tileSize / 2;
         screenY = gamePanel.screenHeight / 2;
+
+        bounds = new Rectangle(8, 16, 32, 32);
 
         setDefaultVals();
         getPlayerImg();
@@ -57,13 +59,48 @@ public class Player extends Entity {
 
     public void update() {
 
+
         if (keyHandler.upPressed ||
                 keyHandler.downPressed ||
                 keyHandler.leftPressed ||
-                keyHandler.rightPressed ) {
+                keyHandler.rightPressed) {
+            if (keyHandler.upPressed) {
+                direction = "up";
+            }
+            if (keyHandler.downPressed) {
+                direction = "down";
+            }
+            if (keyHandler.leftPressed) {
+                direction = "left";
+            }
+            if (keyHandler.rightPressed) {
+                direction = "right";
+            }
+
+
+            collisionOn = false;
+            gamePanel.collisionCheck.checkTile(this);
+
+            if (!collisionOn) {
+                switch (direction) {
+                    case "up":
+                        worldY -= speed;
+                        break;
+                    case "down":
+                        worldY += speed;
+                        break;
+                    case "left":
+                        worldX -= speed;
+                        break;
+                    case "right":
+                        worldX += speed;
+                        break;
+                }
+            }
+
             //Adding so we can swap img at each step to make character look like its moving
             spriteCount++;
-            //player animation thanges every 12 frames
+            //player animation changes every 12 frames
             if (spriteCount > 12) {
                 if (spriteNum == 1) {
                     spriteNum = 2;
@@ -72,23 +109,6 @@ public class Player extends Entity {
                 }
                 spriteCount = 0;
             }
-        }
-
-        if (keyHandler.upPressed) {
-            direction = "up";
-            worldY -= speed;
-        }
-        if (keyHandler.downPressed) {
-            direction = "down";
-            worldY += speed;
-        }
-        if (keyHandler.leftPressed) {
-            direction = "left";
-            worldX -= speed;
-        }
-        if (keyHandler.rightPressed) {
-            direction = "right";
-            worldX += speed;
         }
 
 
